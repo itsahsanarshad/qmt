@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  /* QMT Brand Colors */
+  --qmt-blue: #1a6bff;
+  --qmt-blue-light: #e8f0ff;
+
+  /* Layout */
+  --qmt-sidebar-bg: #ffffff;
+  --qmt-bg: #F7F9FC;
+  --qmt-header-bg: #ffffff;
+
+  /* Typography */
+  --qmt-text: #222222;
+  --qmt-text-muted: #8a8a8a;
+  --qmt-text-secondary: #4a4a4a;
+
+  /* Borders */
+  --qmt-border: #e8e8e8;
+
+  /* Sidebar */
+  --qmt-sidebar-width: 160px;
+  --qmt-header-height: 56px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--qmt-bg);
+  color: var(--qmt-text);
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
