@@ -106,7 +106,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                             {isOpen && (
                                 <div className="pb-1">
                                     {section.items.map((item) => {
-                                        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                                        const isActive = pathname === item.href;
                                         return (
                                             <Link
                                                 key={item.href}

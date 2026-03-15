@@ -20,20 +20,25 @@ const StarRating = ({ filled = 0 }: { filled?: number }) => (
 const TABS = ["Account Details", "Tour request", "Profile History", "Support"] as const;
 type Tab = (typeof TABS)[number];
 
+/* Only show held consumers (Restricted or Suspended) */
+const heldConsumers = consumers.filter(
+    (c) => c.status === "Restricted" || c.status === "Suspended"
+);
+
 /* ─── Page ────────────────────────────────────────────────── */
-export default function AdminConsumersPage() {
-    const [selectedId, setSelectedId] = useState<string>(consumers[0].id);
+export default function AdminConsumerHoldPage() {
+    const [selectedId, setSelectedId] = useState<string>(heldConsumers[0].id);
     const [activeTab, setActiveTab] = useState<Tab>("Account Details");
     const [statusOpen, setStatusOpen] = useState(false);
-    const [status, setStatus] = useState<StatusOption>(consumers[0].status);
+    const [status, setStatus] = useState<StatusOption>(heldConsumers[0].status);
     const [reason, setReason] = useState("");
 
     const statusOptions: StatusOption[] = ["Reinstate", "Suspended", "Restricted"];
 
-    const consumer = consumers.find((c) => c.id === selectedId)!;
+    const consumer = heldConsumers.find((c) => c.id === selectedId)!;
 
     const handleSelectConsumer = (id: string) => {
-        const c = consumers.find((c) => c.id === id)!;
+        const c = heldConsumers.find((c) => c.id === id)!;
         setSelectedId(id);
         setStatus(c.status);
         setReason("");
@@ -43,7 +48,7 @@ export default function AdminConsumersPage() {
     return (
         <div>
             <h2 className="text-sm font-semibold text-(--qmt-text) mb-4">
-                Consumer List
+                Consumer hold
             </h2>
 
             {/* Outer card */}
@@ -64,8 +69,8 @@ export default function AdminConsumersPage() {
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
                                 className={`px-3 py-1.5 text-xs rounded-full whitespace-nowrap transition-colors ${activeTab === tab
-                                        ? "border border-(--qmt-border) text-(--qmt-text) font-semibold bg-white"
-                                        : "text-(--qmt-text-muted) hover:text-(--qmt-text)"
+                                    ? "border border-(--qmt-border) text-(--qmt-text) font-semibold bg-white"
+                                    : "text-(--qmt-text-muted) hover:text-(--qmt-text)"
                                     }`}
                             >
                                 {tab}
@@ -79,12 +84,12 @@ export default function AdminConsumersPage() {
 
                     {/* Left consumer list */}
                     <div className="w-82.5 shrink-0 border-r border-(--qmt-border)">
-                        {consumers.map((c, index) => (
+                        {heldConsumers.map((c, index) => (
                             <div
                                 key={c.id}
                                 onClick={() => handleSelectConsumer(c.id)}
                                 className={`flex items-center cursor-pointer transition-colors hover:bg-gray-50 ${selectedId === c.id ? "bg-gray-50" : ""
-                                    } ${index < consumers.length - 1 ? "border-b border-(--qmt-border)" : ""}`}
+                                    } ${index < heldConsumers.length - 1 ? "border-b border-(--qmt-border)" : ""}`}
                             >
                                 <span className="px-5 py-3.5 text-[12.5px] text-(--qmt-text-muted) w-20">{c.id}</span>
                                 <span className="px-5 py-3.5 text-[12.5px] font-medium text-(--qmt-text) flex-1">{c.name}</span>
@@ -98,7 +103,7 @@ export default function AdminConsumersPage() {
 
                         {activeTab === "Account Details" ? (
                             <>
-                                {/* Profile + field labels & values */}
+                                {/* ── Top section: Profile pic + labels only ── */}
                                 <div className="flex gap-8 items-start">
 
                                     {/* Profile picture */}
@@ -110,19 +115,13 @@ export default function AdminConsumersPage() {
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
-                                        <span className="text-[12px] text-(--qmt-text-muted)">Profile Picture</span>
                                     </div>
 
-                                    {/* Left labels + values */}
-                                    <div className="flex flex-col gap-4 pt-1">
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="text-[11px] text-(--qmt-text-muted)">First Name</span>
-                                            <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.firstName}</span>
-                                        </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="text-[11px] text-(--qmt-text-muted)">Last Name</span>
-                                            <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.lastName}</span>
-                                        </div>
+                                    {/* Left labels only */}
+                                    <div className="flex flex-col gap-5 pt-1">
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">First Name</span>
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">Last Name</span>
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">Profile Picture</span>
                                     </div>
 
                                     {/* Right labels + values */}
@@ -153,46 +152,71 @@ export default function AdminConsumersPage() {
                                 {/* Divider */}
                                 <div className="border-t border-(--qmt-border)" />
 
-                                {/* Status dropdown */}
-                                <div className="relative w-52">
-                                    <button
-                                        onClick={() => setStatusOpen((o) => !o)}
-                                        className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border border-(--qmt-border) text-[13px] text-(--qmt-text) bg-white hover:bg-gray-50 transition-colors"
-                                    >
-                                        <span>Status</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                            className={`transition-transform ${statusOpen ? "rotate-180" : ""}`}>
-                                            <polyline points="6 9 12 15 18 9" />
-                                        </svg>
-                                    </button>
+                                {/* ── Bottom section: two-column layout ── */}
+                                <div className="flex gap-8 items-start">
 
-                                    {statusOpen && (
-                                        <div className="absolute top-full mt-1 w-full bg-white border border-(--qmt-border) rounded-lg shadow-sm overflow-hidden z-10">
-                                            {statusOptions.map((opt) => (
-                                                <button
-                                                    key={opt}
-                                                    onClick={() => { setStatus(opt); setStatusOpen(false); }}
-                                                    className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors hover:bg-gray-50 ${status === opt
-                                                            ? "font-semibold text-(--qmt-text)"
-                                                            : "text-(--qmt-text-muted)"
-                                                        }`}
-                                                >
-                                                    {opt}
-                                                </button>
-                                            ))}
+                                    {/* Left col: Account Status + dropdown + textarea */}
+                                    <div className="flex flex-col gap-4 flex-1">
+                                        {/* Account Status heading + value */}
+                                        <div>
+                                            <p className="text-[13px] font-semibold text-(--qmt-text)">Account Status</p>
+                                            <p className="text-[12.5px] text-(--qmt-text-muted) mt-0.5">{consumer.status}</p>
                                         </div>
-                                    )}
-                                </div>
 
-                                {/* Reason of Restriction */}
-                                <textarea
-                                    value={reason}
-                                    onChange={(e) => setReason(e.target.value)}
-                                    placeholder="Reason of Restriction"
-                                    rows={3}
-                                    className="w-full rounded-2xl border border-(--qmt-border) px-4 py-3 text-[13px] text-(--qmt-text) placeholder:text-(--qmt-text-muted) resize-none outline-none focus:ring-1 focus:ring-gray-300 bg-white"
-                                />
+                                        {/* Status dropdown */}
+                                        <div className="relative w-52">
+                                            <button
+                                                onClick={() => setStatusOpen((o) => !o)}
+                                                className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border border-(--qmt-border) text-[13px] text-(--qmt-text) bg-white hover:bg-gray-50 transition-colors"
+                                            >
+                                                <span>Status</span>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                                    className={`transition-transform ${statusOpen ? "rotate-180" : ""}`}>
+                                                    <polyline points="6 9 12 15 18 9" />
+                                                </svg>
+                                            </button>
+
+                                            {statusOpen && (
+                                                <div className="absolute top-full mt-1 w-full bg-white border border-(--qmt-border) rounded-lg shadow-sm overflow-hidden z-10">
+                                                    {statusOptions.map((opt) => (
+                                                        <button
+                                                            key={opt}
+                                                            onClick={() => { setStatus(opt); setStatusOpen(false); }}
+                                                            className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors hover:bg-gray-50 ${status === opt
+                                                                ? "font-semibold text-(--qmt-text)"
+                                                                : "text-(--qmt-text-muted)"
+                                                                }`}
+                                                        >
+                                                            {opt}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Reason textarea */}
+                                        <textarea
+                                            value={reason}
+                                            onChange={(e) => setReason(e.target.value)}
+                                            placeholder="Reason of Restriction"
+                                            rows={3}
+                                            className="w-full rounded-lg border border-(--qmt-border) px-4 py-3 text-[13px] text-(--qmt-text) placeholder:text-(--qmt-text-muted) resize-none outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+                                        />
+                                    </div>
+
+                                    {/* Right col: Stats + Restriction details */}
+                                    <div className="flex flex-col gap-2 pt-1 min-w-45">
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.progress} days Progress</span>
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.warnings} Warnings</span>
+                                        <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.restrictionsCount} Restriction</span>
+
+                                        <div className="mt-4">
+                                            <p className="text-[13px] font-semibold text-(--qmt-text)">Restriction details</p>
+                                            <p className="text-[12.5px] text-(--qmt-text-muted) mt-1">{consumer.restrictionDetails}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </>
                         ) : (
                             <div className="flex items-center justify-center h-40 text-[13px] text-(--qmt-text-muted)">
