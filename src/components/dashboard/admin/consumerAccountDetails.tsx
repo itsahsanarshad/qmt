@@ -27,18 +27,18 @@ export function ConsumerAccountDetails({
 }: Props) {
     /* ── shared sub-pieces ───────────────────────────────────────── */
     const ProfilePic = () => (
-        <div className="flex flex-col items-center gap-2">
-            <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200">
+        <div className="flex flex-col items-center gap-2 shrink-0">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-gray-200">
                 <img src={consumer.profilePic} alt="Profile" className="w-full h-full object-cover" />
             </div>
             {variant === "list" && (
-                <span className="text-[12px] text-(--qmt-text-muted)">Profile Picture</span>
+                <span className="text-[11px] text-(--qmt-text-muted)">Profile Picture</span>
             )}
         </div>
     );
 
     const StatusDropdown = () => (
-        <div className="relative w-52">
+        <div className="relative w-full sm:w-52">
             <button
                 onClick={() => setStatusOpen(!statusOpen)}
                 className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border border-(--qmt-border) text-[13px] text-(--qmt-text) bg-white hover:bg-gray-50 transition-colors"
@@ -71,26 +71,22 @@ export function ConsumerAccountDetails({
         return (
             <>
                 {/* Profile + fields */}
-                <div className="flex gap-8 items-start">
+                <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
                     <ProfilePic />
 
-                    {/* Left fields */}
-                    <div className="flex flex-col gap-4 pt-1">
+                    {/* Field grid — stacks on sm, side-by-side on md+ */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 flex-1 pt-1">
                         <div className="flex flex-col gap-0.5">
                             <span className="text-[11px] text-(--qmt-text-muted)">First Name</span>
                             <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.firstName}</span>
                         </div>
                         <div className="flex flex-col gap-0.5">
+                            <span className="text-[11px] text-(--qmt-text-muted)">Email Address</span>
+                            <span className="text-[13px] text-(--qmt-text) font-medium break-all">{consumer.email}</span>
+                        </div>
+                        <div className="flex flex-col gap-0.5">
                             <span className="text-[11px] text-(--qmt-text-muted)">Last Name</span>
                             <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.lastName}</span>
-                        </div>
-                    </div>
-
-                    {/* Right fields */}
-                    <div className="flex flex-col gap-4 pt-1">
-                        <div className="flex flex-col gap-0.5">
-                            <span className="text-[11px] text-(--qmt-text-muted)">Email Address</span>
-                            <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.email}</span>
                         </div>
                         <div className="flex flex-col gap-0.5">
                             <span className="text-[11px] text-(--qmt-text-muted)">Date of Birth</span>
@@ -104,7 +100,7 @@ export function ConsumerAccountDetails({
                             <span className="text-[11px] text-(--qmt-text-muted)">State</span>
                             <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.state}</span>
                         </div>
-                        <div className="flex flex-col gap-0.5">
+                        <div className="flex flex-col gap-0.5 sm:col-span-2">
                             <span className="text-[11px] text-(--qmt-text-muted)">Phone Number</span>
                             <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.phone}</span>
                         </div>
@@ -129,22 +125,23 @@ export function ConsumerAccountDetails({
     /* ── HOLD variant ────────────────────────────────────────────── */
     return (
         <>
-            {/* Top: profile pic + name labels + right fields */}
-            <div className="flex gap-8 items-start">
+            {/* Top: profile pic + fields */}
+            <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
                 <ProfilePic />
 
-                {/* Left labels only */}
-                <div className="flex flex-col gap-5 pt-1">
-                    <span className="text-[12.5px] text-(--qmt-text-muted)">First Name</span>
-                    <span className="text-[12.5px] text-(--qmt-text-muted)">Last Name</span>
-                    <span className="text-[12.5px] text-(--qmt-text-muted)">Profile Picture</span>
-                </div>
-
-                {/* Right fields */}
-                <div className="flex flex-col gap-4 pt-1">
+                {/* Labels + field grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 flex-1 pt-1">
+                    <div className="flex flex-col gap-0.5">
+                        <span className="text-[11px] text-(--qmt-text-muted)">First Name</span>
+                        <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.firstName}</span>
+                    </div>
                     <div className="flex flex-col gap-0.5">
                         <span className="text-[11px] text-(--qmt-text-muted)">Email Address</span>
-                        <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.email}</span>
+                        <span className="text-[13px] text-(--qmt-text) font-medium break-all">{consumer.email}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                        <span className="text-[11px] text-(--qmt-text-muted)">Last Name</span>
+                        <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.lastName}</span>
                     </div>
                     <div className="flex flex-col gap-0.5">
                         <span className="text-[11px] text-(--qmt-text-muted)">Date of Birth</span>
@@ -158,7 +155,7 @@ export function ConsumerAccountDetails({
                         <span className="text-[11px] text-(--qmt-text-muted)">State</span>
                         <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.state}</span>
                     </div>
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-0.5 sm:col-span-2">
                         <span className="text-[11px] text-(--qmt-text-muted)">Phone Number</span>
                         <span className="text-[13px] text-(--qmt-text) font-medium">{consumer.phone}</span>
                     </div>
@@ -168,10 +165,10 @@ export function ConsumerAccountDetails({
             <div className="border-t border-(--qmt-border)" />
 
             {/* Bottom: two-column layout */}
-            <div className="flex gap-8 items-start">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
 
                 {/* Left: Account Status + dropdown + textarea */}
-                <div className="flex flex-col gap-4 flex-1">
+                <div className="flex flex-col gap-4 flex-1 w-full">
                     <div>
                         <p className="text-[13px] font-semibold text-(--qmt-text)">Account Status</p>
                         <p className="text-[12.5px] text-(--qmt-text-muted) mt-0.5">{consumer.status}</p>
@@ -187,7 +184,7 @@ export function ConsumerAccountDetails({
                 </div>
 
                 {/* Right: progress stats + restriction details */}
-                <div className="flex flex-col gap-2 pt-1 min-w-45">
+                <div className="flex flex-col gap-2 pt-1 md:min-w-40 lg:min-w-48">
                     <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.progress} days Progress</span>
                     <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.warnings} Warnings</span>
                     <span className="text-[12.5px] text-(--qmt-text-muted)">{consumer.restrictionsCount} Restriction</span>

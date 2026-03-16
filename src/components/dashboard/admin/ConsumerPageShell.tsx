@@ -36,6 +36,8 @@ export function ConsumerPageShell({ consumers, title, variant }: Props) {
     const [statusOpen, setStatusOpen] = useState(false);
     const [status, setStatus] = useState<StatusOption>(consumers[0]?.status ?? "Reinstate");
     const [reason, setReason] = useState("");
+    /* mobile: toggle between list and detail */
+    const [showDetail, setShowDetail] = useState(false);
 
     const consumer = consumers.find((c) => c.id === selectedId)!;
 
@@ -45,6 +47,7 @@ export function ConsumerPageShell({ consumers, title, variant }: Props) {
         setStatus(c.status);
         setReason("");
         setStatusOpen(false);
+        setShowDetail(true);   // auto-navigate to detail on small screens
     };
 
     if (!consumer) {
@@ -63,21 +66,30 @@ export function ConsumerPageShell({ consumers, title, variant }: Props) {
             <div className="bg-white rounded-xl border border-(--qmt-border) overflow-hidden">
 
                 {/* ── Full-width header row ── */}
-                <div className="flex bg-[#fafbfc] border-b border-(--qmt-border)">
+                <div className="flex flex-col lg:flex-row bg-[#fafbfc] border-b border-(--qmt-border)">
 
-                    {/* Left columns header */}
-                    <div className="w-82.5 shrink-0 flex">
-                        <span className="px-5 py-3 text-xs font-medium text-(--qmt-text-muted) w-20">User ID</span>
-                        <span className="px-5 py-3 text-xs font-medium text-(--qmt-text-muted) flex-1">Name</span>
+                    {/* Left columns header — hidden on small, visible lg+ */}
+                    <div className="hidden lg:flex lg:w-72 xl:w-80 2xl:w-96 shrink-0">
+                        <span className="px-4 py-3 text-xs font-medium text-(--qmt-text-muted) w-16 xl:w-20">User ID</span>
+                        <span className="px-4 py-3 text-xs font-medium text-(--qmt-text-muted) flex-1">Name</span>
                     </div>
 
-                    {/* Right: tab buttons */}
-                    <div className="flex-1 flex items-center gap-1 border-l border-(--qmt-border) px-4">
+                    {/* Tab buttons */}
+                    <div className="flex-1 flex items-center gap-1 lg:border-l border-(--qmt-border) px-3 lg:px-4 py-2 overflow-x-auto scrollbar-hide">
+                        {/* Back button — only on mobile when detail is shown */}
+                        {showDetail && (
+                            <button
+                                onClick={() => setShowDetail(false)}
+                                className="lg:hidden shrink-0 mr-2 text-[11px] text-(--qmt-text-muted) hover:text-(--qmt-text) flex items-center gap-1 whitespace-nowrap"
+                            >
+                                ← Back
+                            </button>
+                        )}
                         {TABS.map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`px-3 py-1.5 text-xs rounded-full whitespace-nowrap transition-colors ${
+                                className={`px-2.5 py-1.5 text-xs rounded-full whitespace-nowrap transition-colors shrink-0 ${
                                     activeTab === tab
                                         ? "border border-(--qmt-border) text-(--qmt-text) font-semibold bg-white"
                                         : "text-(--qmt-text-muted) hover:text-(--qmt-text)"
@@ -89,11 +101,11 @@ export function ConsumerPageShell({ consumers, title, variant }: Props) {
                     </div>
                 </div>
 
-                {/* ── Body: left list + right details ── */}
-                <div className="flex">
+                {/* ── Body ── */}
+                <div className="flex flex-col lg:flex-row">
 
-                    {/* Left consumer list */}
-                    <div className="w-82.5 shrink-0 border-r border-(--qmt-border)">
+                    {/* Left consumer list — full width on mobile unless detail is shown */}
+                    <div className={`lg:w-72 xl:w-80 2xl:w-96 shrink-0 border-b lg:border-b-0 lg:border-r border-(--qmt-border) ${showDetail ? "hidden lg:block" : "block"}`}>
                         {consumers.map((c, index) => (
                             <div
                                 key={c.id}
@@ -102,15 +114,15 @@ export function ConsumerPageShell({ consumers, title, variant }: Props) {
                                     selectedId === c.id ? "bg-gray-50" : ""
                                 } ${index < consumers.length - 1 ? "border-b border-(--qmt-border)" : ""}`}
                             >
-                                <span className="px-5 py-3.5 text-[12.5px] text-(--qmt-text-muted) w-20">{c.id}</span>
-                                <span className="px-5 py-3.5 text-[12.5px] font-medium text-(--qmt-text) flex-1">{c.name}</span>
-                                <span className="py-3.5 pr-5"><StarRating filled={c.rating} /></span>
+                                <span className="px-4 py-3.5 text-[12px] text-(--qmt-text-muted) w-16 xl:w-20 shrink-0">{c.id}</span>
+                                <span className="px-3 py-3.5 text-[12.5px] font-medium text-(--qmt-text) flex-1 truncate">{c.name}</span>
+                                <span className="py-3.5 pr-4 shrink-0"><StarRating filled={c.rating} /></span>
                             </div>
                         ))}
                     </div>
 
-                    {/* Right panel */}
-                    <div className="flex-1 p-6 flex flex-col gap-5">
+                    {/* Right panel — hidden on mobile unless detail is shown */}
+                    <div className={`flex-1 p-4 sm:p-5 lg:p-6 flex flex-col gap-5 ${showDetail || true ? "block" : "hidden"} ${!showDetail ? "hidden lg:block" : "block"}`}>
                         {activeTab === "Account Details" && (
                             <ConsumerAccountDetails
                                 consumer={consumer}

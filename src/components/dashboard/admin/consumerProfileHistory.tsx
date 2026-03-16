@@ -35,9 +35,9 @@ export function ConsumerProfileHistory({ consumer }: Props) {
             {/* Header */}
             <div>
                 <h3 className="text-[14px] font-semibold text-(--qmt-text)">Tour history</h3>
-                <div className="flex gap-6 mt-1">
+                <div className="flex flex-wrap gap-4 sm:gap-6 mt-1">
                     <span className="text-[12.5px] text-(--qmt-text-muted)">Total Reviews ({history.length})</span>
-                    <span className="text-[12.5px] text-(--qmt-text-muted)">Total Projects({totalProjects})</span>
+                    <span className="text-[12.5px] text-(--qmt-text-muted)">Total Projects ({totalProjects})</span>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@ export function ConsumerProfileHistory({ consumer }: Props) {
                         {/* Title + Remove */}
                         <div className="flex items-start justify-between gap-4">
                             <span className="text-[13.5px] font-semibold text-(--qmt-text)">{entry.title}</span>
-                            <button className="shrink-0 px-4 py-1.5 text-[12.5px] font-medium text-(--qmt-text) border border-(--qmt-border) rounded-lg hover:bg-gray-50 transition-colors">
+                            <button className="shrink-0 px-3 sm:px-4 py-1.5 text-[12.5px] font-medium text-(--qmt-text) border border-(--qmt-border) rounded-lg hover:bg-gray-50 transition-colors">
                                 Remove
                             </button>
                         </div>
@@ -58,12 +58,9 @@ export function ConsumerProfileHistory({ consumer }: Props) {
                         {/* Chips row */}
                         <div className="flex flex-wrap gap-2 items-center">
                             <Chip label={entry.dateRange} variant="date" />
-
-                            {/* Star rating chip */}
                             <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 border border-orange-100">
                                 <StarRating filled={entry.rating} />
                             </span>
-
                             <Chip label={entry.guideName} variant="guide" />
                         </div>
 

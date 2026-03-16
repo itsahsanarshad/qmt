@@ -20,8 +20,8 @@ export function ConsumerTourReq({ consumer }: Props) {
         <div className="flex flex-col gap-5">
             {/* Header */}
             <div>
-                <h3 className="text-[14px] font-semibold text-(--qmt-text)">Consumer hold</h3>
-                <div className="flex gap-6 mt-1">
+                <h3 className="text-[14px] font-semibold text-(--qmt-text)">Tour Requests</h3>
+                <div className="flex flex-wrap gap-4 sm:gap-6 mt-1">
                     <span className="text-[12.5px] text-(--qmt-text-muted)">Active Tours ({active.length})</span>
                     <span className="text-[12.5px] text-(--qmt-text-muted)">Completed Tours ({completed.length})</span>
                 </div>
@@ -31,28 +31,32 @@ export function ConsumerTourReq({ consumer }: Props) {
             {consumer.tourRequests.length === 0 ? (
                 <p className="text-[13px] text-(--qmt-text-muted)">No tour requests yet.</p>
             ) : (
-                consumer.tourRequests.map((tour) => (
-                    <div key={tour.id} className="flex flex-col gap-2">
-                        {/* Title + bids */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-[13.5px] font-semibold text-(--qmt-text)">{tour.title}</span>
-                            <span className="text-[12.5px] text-(--qmt-text-muted)">Bids {String(tour.bids).padStart(2, "0")}</span>
-                        </div>
+                <div className="flex flex-col gap-4">
+                    {consumer.tourRequests.map((tour) => (
+                        <div key={tour.id} className="flex flex-col gap-2 pb-4 border-b border-(--qmt-border) last:border-0 last:pb-0">
+                            {/* Title + bids */}
+                            <div className="flex items-start justify-between gap-4">
+                                <span className="text-[13.5px] font-semibold text-(--qmt-text)">{tour.title}</span>
+                                <span className="text-[12.5px] text-(--qmt-text-muted) whitespace-nowrap shrink-0">
+                                    Bids {String(tour.bids).padStart(2, "0")}
+                                </span>
+                            </div>
 
-                        {/* Tag chips */}
-                        <div className="flex flex-wrap gap-2">
-                            <Chip label={tour.type} />
-                            <Chip label={tour.dateRange} />
-                            <Chip label={tour.destination} />
-                            <Chip label={`${tour.persons} Person`} />
-                            <Chip label={`$${tour.budget.toLocaleString()}`} />
-                            <Chip label={tour.duration} />
-                        </div>
+                            {/* Tag chips */}
+                            <div className="flex flex-wrap gap-2">
+                                <Chip label={tour.type} />
+                                <Chip label={tour.dateRange} />
+                                <Chip label={tour.destination} />
+                                <Chip label={`${tour.persons} Person`} />
+                                <Chip label={`$${tour.budget.toLocaleString()}`} />
+                                <Chip label={tour.duration} />
+                            </div>
 
-                        {/* Description */}
-                        <p className="text-[12.5px] text-(--qmt-text-muted)">{tour.description}</p>
-                    </div>
-                ))
+                            {/* Description */}
+                            <p className="text-[12.5px] text-(--qmt-text-muted)">{tour.description}</p>
+                        </div>
+                    ))}
+                </div>
             )}
         </div>
     );

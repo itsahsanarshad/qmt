@@ -92,16 +92,16 @@ function TripCard({ trip, highlight, onRemove }: { trip: FlatTrip; highlight?: b
     const completedTours = consumer.tourRequests.filter((t) => t.status === "Completed").length;
 
     return (
-        <div className={`flex gap-6 p-5 ${highlight ? "rounded-xl border border-(--qmt-border) shadow-sm" : "border-b border-(--qmt-border) last:border-0"}`}>
+        <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-5 ${highlight ? "rounded-xl border border-(--qmt-border) shadow-sm" : "border-b border-(--qmt-border) last:border-0"}`}>
             {/* Left: tour info */}
             <div className="flex-1 flex flex-col gap-2 min-w-0">
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-start justify-between gap-4">
                     <span className="text-[13.5px] font-semibold text-(--qmt-text)">{trip.title}</span>
-                    <span className="text-[12.5px] text-(--qmt-text) whitespace-nowrap">
+                    <span className="text-[12.5px] text-(--qmt-text) whitespace-nowrap shrink-0">
                         Bids {String(trip.bids).padStart(2, "0")}
                     </span>
                 </div>
-                <div className="flex wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5">
                     <Chip label={trip.type} />
                     <Chip label={trip.dateRange} />
                     <Chip label={trip.destination} />
@@ -112,22 +112,22 @@ function TripCard({ trip, highlight, onRemove }: { trip: FlatTrip; highlight?: b
                 <p className="text-[12px] text-(--qmt-text-muted)">{trip.description}</p>
             </div>
 
-            {/* Right: consumer info */}
-            <div className="flex flex-col gap-1 min-w-44 pt-0.5">
+            {/* Right: consumer info — hidden on xs, shown sm+ */}
+            <div className="hidden sm:flex flex-col gap-1 sm:min-w-36 md:min-w-44 pt-0.5 shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="text-[13px] font-medium text-(--qmt-text)">{consumer.name}</span>
                     <StarRating filled={consumer.rating} />
                 </div>
                 <span className="text-[12px] text-(--qmt-text-muted)">{consumer.country}</span>
                 <span className="text-[12px] text-(--qmt-text-muted)">{consumer.state}</span>
-                <div className="flex gap-4 mt-1">
-                    <span className="text-[11.5px] text-(--qmt-text-muted)">Active Tours ({activeTours})</span>
-                    <span className="text-[11.5px] text-(--qmt-text-muted)">Completed Tours ({completedTours})</span>
+                <div className="flex flex-wrap gap-2 mt-1">
+                    <span className="text-[11.5px] text-(--qmt-text-muted)">Active ({activeTours})</span>
+                    <span className="text-[11.5px] text-(--qmt-text-muted)">Completed ({completedTours})</span>
                 </div>
             </div>
 
             {/* Remove button */}
-            <div className="flex items-start pt-0.5">
+            <div className="flex sm:items-start sm:pt-0.5">
                 <button
                     onClick={() => onRemove(trip.id)}
                     className="px-3.5 py-1.5 text-[12.5px] font-bold text-(--qmt-text) border border-(--qmt-border) rounded-2xl hover:bg-gray-50 transition-colors whitespace-nowrap"
@@ -188,9 +188,9 @@ export function TripPageShell({ trips: initialTrips, activeTab }: Props) {
     return (
         <div>
             {/* page heading + tab switcher */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <h2 className="text-sm font-semibold text-(--qmt-text)">Trip Management</h2>
-                <div className="flex bg-white border border-(--qmt-border) rounded-full p-0.5">
+                <div className="flex bg-white border border-(--qmt-border) rounded-full p-0.5 self-start sm:self-auto">
                     <Link
                         href="/dashboard/admin/trips/active"
                         className={`px-4 py-1.5 text-xs rounded-full transition-colors whitespace-nowrap ${activeTab === "Active Trips"
@@ -216,7 +216,7 @@ export function TripPageShell({ trips: initialTrips, activeTab }: Props) {
             <div className="bg-white rounded-xl border border-(--qmt-border) overflow-hidden">
 
                 {/* ── Filter bar ── */}
-                <div className="px-6 py-4 border-b border-(--qmt-border) flex items-end gap-6 flex-wrap">
+                <div className="px-4 sm:px-6 py-4 border-b border-(--qmt-border) flex flex-col sm:flex-row sm:flex-wrap items-start gap-4 sm:gap-6 md:gap-8">
 
                     {/* Tour Type */}
                     <div className="flex flex-col gap-1.5">

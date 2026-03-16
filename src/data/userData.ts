@@ -403,6 +403,27 @@ export const consumers: Consumer[] = [
                 details: "Starter Tier Monthly membership fees",
                 status: "Inprogress",
             },
+            {
+                id: "st-005-d",
+                date: "Jan 20, 2025",
+                type: "Support",
+                details: "Starter Tier Monthly membership fees",
+                status: "Resolved",
+            },
+            {
+                id: "st-005-e",
+                date: "Feb 15, 2025",
+                type: "Support",
+                details: "Refund request on cancelled tour",
+                status: "Inprogress",
+            },
+            {
+                id: "st-005-f",
+                date: "Feb 26, 2025",
+                type: "Support",
+                details: "Starter Tier Monthly membership fees",
+                status: "Inprogress",
+            },
         ],
     },
     {

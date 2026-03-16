@@ -147,7 +147,7 @@ function SupportCard({
         <div
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className={`flex gap-6 p-5 transition-colors ${highlight
+            className={`flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-5 transition-colors ${highlight
                 ? "rounded-xl border border-(--qmt-border) shadow-sm"
                 : "border-b border-(--qmt-border) last:border-0"
                 } hover:bg-gray-50/50`}
@@ -164,22 +164,22 @@ function SupportCard({
                 </p>
             </div>
 
-            {/* Right: consumer info */}
-            <div className="flex flex-col gap-1 min-w-44 pt-0.5">
+            {/* Right: consumer info — hidden on xs */}
+            <div className="hidden sm:flex flex-col gap-1 sm:min-w-36 md:min-w-44 pt-0.5 shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="text-[13px] font-medium text-(--qmt-text)">{consumer.name}</span>
                     <StarRating filled={consumer.rating} />
                 </div>
                 <span className="text-[12px] text-(--qmt-text-muted)">{consumer.country}</span>
                 <span className="text-[12px] text-(--qmt-text-muted)">{consumer.state}</span>
-                <div className="flex gap-4 mt-1">
-                    <span className="text-[11.5px] text-(--qmt-text-muted)">Active Tours ({activeTours})</span>
-                    <span className="text-[11.5px] text-(--qmt-text-muted)">Completed Tours ({completedTours})</span>
+                <div className="flex flex-wrap gap-2 mt-1">
+                    <span className="text-[11.5px] text-(--qmt-text-muted)">Active ({activeTours})</span>
+                    <span className="text-[11.5px] text-(--qmt-text-muted)">Completed ({completedTours})</span>
                 </div>
             </div>
 
-            {/* Status dropdown (appears on hover or when card is highlighted) */}
-            <div className={`flex items-start pt-0.5 transition-opacity ${hovered || highlight ? "opacity-100" : "opacity-0"}`}>
+            {/* Status dropdown — always visible on mobile (no hover on touch), hover on desktop */}
+            <div className={`flex sm:items-start sm:pt-0.5 transition-opacity sm:${hovered || highlight ? "opacity-100" : "opacity-0"}`}>
                 <StatusDropdown
                     ticketId={ticket.id}
                     currentStatus={ticket.status}
@@ -239,9 +239,9 @@ export function SupportPageShell({ tickets: initialTickets, activeTab: initialAc
     return (
         <div>
             {/* heading + tab switcher */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <h2 className="text-sm font-semibold text-(--qmt-text)">Agent Support</h2>
-                <div className="flex bg-white border border-(--qmt-border) rounded-full p-0.5">
+                <div className="flex bg-white border border-(--qmt-border) rounded-full p-0.5 self-start sm:self-auto">
                     {(["In Progress", "Resolved"] as ActiveTab[]).map((tab) => (
                         <button
                             key={tab}
@@ -261,7 +261,7 @@ export function SupportPageShell({ tickets: initialTickets, activeTab: initialAc
             <div className="bg-white rounded-xl border border-(--qmt-border) overflow-hidden shadow-sm">
 
                 {/* ── Filter bar ── */}
-                <div className="px-6 py-4 border-b border-(--qmt-border) flex items-start gap-8 flex-wrap">
+                <div className="px-4 sm:px-6 py-4 border-b border-(--qmt-border) flex items-start gap-4 sm:gap-6 md:gap-8 flex-wrap">
 
                     {/* Type filter */}
                     <Dropdown
