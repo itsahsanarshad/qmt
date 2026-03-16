@@ -97,7 +97,7 @@ function TripCard({ trip, highlight, onRemove }: { trip: FlatTrip; highlight?: b
             <div className="flex-1 flex flex-col gap-2 min-w-0">
                 <div className="flex items-center justify-between gap-4">
                     <span className="text-[13.5px] font-semibold text-(--qmt-text)">{trip.title}</span>
-                    <span className="text-[12.5px] text-(--qmt-text-muted) whitespace-nowrap">
+                    <span className="text-[12.5px] text-(--qmt-text) whitespace-nowrap">
                         Bids {String(trip.bids).padStart(2, "0")}
                     </span>
                 </div>
@@ -130,7 +130,7 @@ function TripCard({ trip, highlight, onRemove }: { trip: FlatTrip; highlight?: b
             <div className="flex items-start pt-0.5">
                 <button
                     onClick={() => onRemove(trip.id)}
-                    className="px-3.5 py-1.5 text-[12.5px] font-medium text-(--qmt-text) border border-(--qmt-border) rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
+                    className="px-3.5 py-1.5 text-[12.5px] font-bold text-(--qmt-text) border border-(--qmt-border) rounded-2xl hover:bg-gray-50 transition-colors whitespace-nowrap"
                 >
                     Remove
                 </button>
@@ -303,7 +303,10 @@ export function TripPageShell({ trips: initialTrips, activeTab }: Props) {
                         </div>
                     ) : (
                         paginated.map((trip, idx) => (
-                            <TripCard key={trip.id} trip={trip} highlight={idx === 1} onRemove={handleRemove} />
+                            <TripCard key={trip.id}
+                                trip={trip}
+                                // highlight={idx === 1} 
+                                onRemove={handleRemove} />
                         ))
                     )}
                 </div>
