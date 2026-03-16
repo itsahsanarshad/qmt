@@ -45,7 +45,7 @@ export function ConsumerTourReq({ consumer }: Props) {
                             <Chip label={tour.dateRange} />
                             <Chip label={tour.destination} />
                             <Chip label={`${tour.persons} Person`} />
-                            <Chip label={tour.budget} />
+                            <Chip label={`$${tour.budget.toLocaleString()}`} />
                             <Chip label={tour.duration} />
                         </div>
 
